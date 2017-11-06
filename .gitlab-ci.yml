@@ -4,7 +4,7 @@ build_image:
         - docker:dind
     script:
         - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-        - docker build -t registry.gitlab.com/skatebrus/nodejs-warriars .
-        - docker push registry.gitlab.com/skatebrus/nodejs-warriars:latest
+        - docker build -t registry.gitlab.com/jonasmyhrrefseth/spo3020-gameserver .
+        - docker push registry.gitlab.com/jonasmyhrrefseth/spo3020-gameserver:latest
     only:
         - master
