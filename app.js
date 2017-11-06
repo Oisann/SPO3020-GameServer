@@ -9,6 +9,11 @@ var SERVER_PORT = process.env.PORT || 3000;
 server.listen(SERVER_PORT);
 var startTime = GetUnixTimestamp();
 
+var LOBBIES = [];
+
+LOBBIES["NUMBER 1"] = { var: "LUL" };
+LOBBIES["NUMBER 2"] = { var: "mamma" };
+
 app.get('/', function (req, res) {
     res.json({ "seed": SERVER_SEED, "version": SERVER_VERSION, "status": "OK", "online": 0, "uptime": (GetUnixTimestamp() - startTime) });
 });
@@ -22,6 +27,20 @@ io.on("connection", function (socket) {
         //Send to everyone but yourself
         socket.broadcast.emit('registered', { id: "0" });
     });
+
+    socket.on('matchmake', function (data) {
+        
+        for(var lobby in LOBBIES) {
+            if(LOBBIES.hasOwnProperty(lobby)) {
+                console.log(lobby);
+                break;
+            }
+        }
+
+        //io.sockets.connected[socket.id].emit('failedLogin', {status: "Error registering the client", error: error});
+
+    });
+
 
 });
 
