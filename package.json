@@ -1,0 +1,28 @@
+{
+  "name": "SPO3020 - GameServer",
+  "version": "1.0.0",
+  "description": "Game Server for a Mandatory Assignment",
+  "keywords": [
+    "realtime",
+    "turnbased",
+    "gps",
+    "android",
+    "ios"
+  ],
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/JonasMyhrRefseth/SPO3020-GameServer"
+  },
+  "dependencies": {
+    "shortid": "^2.2.8",
+    "express": "4.15.4",
+    "socket.io": "2.0.3"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
