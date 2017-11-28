@@ -5,8 +5,11 @@ var shortid = require('shortid');
 
 var SERVER_SEED = shortid.generate();
 var SERVER_VERSION = '0.0.1';
+
 var SERVER_PORT = process.env.PORT || 3000;
 var PREFAB_COUNT = process.env.PREFAB_COUNT || 3;
+var LANE_COUNT = process.env.LANE_COUNT || 4;
+
 server.listen(SERVER_PORT);
 var startTime = GetUnixTimestamp();
 
@@ -32,8 +35,19 @@ io.on("connection", function (socket) {
             var player = lobby.player1.id === socket.id ? lobby.player1 : (lobby.player2.id === socket.id ? lobby.player2 : null);
             var other = lobby.player1.id === socket.id ? lobby.player2 : (lobby.player2.id === socket.id ? lobby.player1 : null);
             if(player != null) {
-                player.pos = data.pos;
-                io.sockets.connected[other.id].emit('moved', { pos: player.pos });
+                var dir = parseInt(data.direction);
+                if(dir >= -2 && dir <= 2) {
+                    var newPos = player.pos + dir;
+                    if(newPos >= 0 && newPos <= (LANE_COUNT - 1)) {
+                        player.pos = newPos;
+                    } else {
+                        console.log('Player tried to move outside the map.');
+                    }
+                } else {
+                    console.log('Player tried to move further than allowed.');
+                }
+                io.sockets.connected[other.id].emit('moved', { who: player.id === lobby.player1.id ? "0" : "1", pos: player.pos + "" });
+                io.sockets.connected[player.id].emit('moved', { who: player.id === lobby.player1.id ? "0" : "1", pos: player.pos + "" });
             } else {
                 console.log('Someone tried to move in someone elses lobby...');
             }
@@ -50,7 +64,7 @@ io.on("connection", function (socket) {
                 pos: 0
             },
             player2: {
-                pos: 3
+                pos: (LANE_COUNT - 1)
             }
         }
 
@@ -79,8 +93,8 @@ io.on("connection", function (socket) {
 
             newLobby.map = GenerateMap(20);
 
-            io.sockets.connected[newLobby.player1.id].emit('matchfound', { lobbyid: lobbyid, playerNumber: 0, map: newLobby.map });
-            io.sockets.connected[newLobby.player2.id].emit('matchfound', { lobbyid: lobbyid, playerNumber: 1, map: newLobby.map });
+            io.sockets.connected[newLobby.player1.id].emit('matchfound', { lobbyid: lobbyid, playerNumber: "0", map: newLobby.map });
+            io.sockets.connected[newLobby.player2.id].emit('matchfound', { lobbyid: lobbyid, playerNumber: "1", map: newLobby.map });
         }
     });
 });
