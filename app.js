@@ -4,7 +4,7 @@ var io = require('socket.io')(server);
 var shortid = require('shortid');
 
 var SERVER_SEED = shortid.generate();
-var SERVER_VERSION = '0.0.1';
+var SERVER_VERSION = '1.0.0';
 
 var SERVER_PORT = process.env.PORT || 3000;
 var POSE_COUNT = process.env.POSE_COUNT || 4;
@@ -136,6 +136,13 @@ io.on("connection", function (socket) {
                             io.sockets.connected[other.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                             io.sockets.connected[player.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                         }
+                    }
+
+                    if(player.hit >= 3) {
+                        clearTimeout(lobby.time_out);
+                        if(lobby.mapGeneration != undefined)
+                            clearInterval(lobby.mapGeneration);
+                        delete LOBBIES[data.lobbyid];
                     }
                 } else {
                     console.log('A wall was not found...');
