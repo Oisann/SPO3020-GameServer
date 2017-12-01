@@ -124,7 +124,7 @@ io.on("connection", function (socket) {
                         } else {
                             console.log(socket.id, "hit the wall.");
                             player.hit += 1;
-                            //io.sockets.connected[other.id].emit('posed', { who: player.id === lobby.player1.id ? "0" : "1", pose: player.pose + "" });
+                            io.sockets.connected[other.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                             io.sockets.connected[player.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                         }
                     } else {
@@ -133,7 +133,7 @@ io.on("connection", function (socket) {
                         } else {
                             console.log(socket.id, "hit the wall.");
                             player.hit += 1;
-                            //io.sockets.connected[other.id].emit('posed', { who: player.id === lobby.player1.id ? "0" : "1", pose: player.pose + "" });
+                            io.sockets.connected[other.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                             io.sockets.connected[player.id].emit('hit', { who: player.id === lobby.player1.id ? "0" : "1", hit: player.hit + "" });
                         }
                     }
